@@ -1,5 +1,5 @@
 import { TileType } from '@models/Tile';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { ExplosionIcon, BombIcon } from '@components/Icons';
 import { observer } from 'mobx-react-lite';
 import { useMst } from '@stores/Board';
@@ -56,8 +56,19 @@ const Tile = ({ tile }: { tile: TileType }) => {
         />
       );
     }
-
-    return neighborMinesCount;
+    return (
+      <Text
+        textColor={
+          neighborMinesCount > 2
+            ? 'red.500'
+            : neighborMinesCount > 1
+            ? 'green.500'
+            : 'blue.500'
+        }
+      >
+        {neighborMinesCount}
+      </Text>
+    );
   };
 
   return (
