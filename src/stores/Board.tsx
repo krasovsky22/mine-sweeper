@@ -1,10 +1,15 @@
 import { createContext, useContext } from 'react';
-import { types, Instance, destroy } from 'mobx-state-tree';
+import { types, Instance } from 'mobx-state-tree';
 
 import Tile from '@models/Tile';
+import { observe } from 'mobx';
 
 const BOARD_SIZE = 16;
 const NUMBER_OF_MINES = 36;
+const MINUTES_FOR_COMPLETION = 40;
+
+let minutesLeftTimer: number;
+let secondsTimer: number;
 
 const createRandomFromInterval = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -15,9 +20,41 @@ export const BoardStore = types
     size: types.number,
     number_of_mines: types.number,
     tiles: types.array(Tile),
+    seconds_played: types.optional(types.number, 0),
+    minutes_left: types.optional(types.number, MINUTES_FOR_COMPLETION),
   })
   .actions((self) => ({
-    initialize() {
+    setSecondsPlayed(secondsPlayed: number) {
+      self.seconds_played = secondsPlayed;
+    },
+    setMinutesLeft(minutesLeft: number) {
+      self.minutes_left = minutesLeft;
+    },
+  }))
+  .actions((self) => ({
+    createTimers() {
+      clearInterval(minutesLeftTimer);
+      clearInterval(secondsTimer);
+
+      self.minutes_left = MINUTES_FOR_COMPLETION;
+      self.seconds_played = 0;
+
+      minutesLeftTimer = setInterval(() => {
+        self.setMinutesLeft(self.minutes_left - 1);
+      }, 60000);
+
+      secondsTimer = setInterval(() => {
+        self.setSecondsPlayed(self.seconds_played + 1);
+      }, 1000);
+    },
+  }))
+  .actions((self) => ({
+    beforeDestroy() {
+      clearInterval(minutesLeftTimer);
+      clearInterval(secondsTimer);
+    },
+
+    afterCreate() {
       // will initialize rows and tiles for each row
       const randomMinesIndexes: number[] = Array.from(
         {
@@ -36,6 +73,8 @@ export const BoardStore = types
           index += 1;
         });
       });
+
+      self.createTimers();
     },
   }))
   .actions((self) => ({
@@ -50,6 +89,8 @@ export const BoardStore = types
       self.tiles.forEach((tile, index) => {
         tile.reset(randomMinesIndexes.includes(index));
       });
+
+      self.createTimers();
     },
   }))
   .views((self) => ({
@@ -66,7 +107,17 @@ export const BoardStore = types
     },
 
     get gameIsLost() {
-      return self.tiles.some((tile) => tile.isExploded);
+      return (
+        self.number_of_mines <= 0 || self.tiles.some((tile) => tile.isExploded)
+      );
+    },
+
+    get minutesLeft() {
+      return self.minutes_left <= 0 ? 0 : self.minutes_left;
+    },
+
+    get secondsPlayed() {
+      return self.seconds_played;
     },
 
     get gameIsWon() {
@@ -89,7 +140,12 @@ let initialState = BoardStore.create({
   number_of_mines: NUMBER_OF_MINES,
 });
 
-initialState.initialize();
+observe(initialState, ({ object }) => {
+  if (object.gameIsLost) {
+    secondsTimer && clearTimeout(secondsTimer);
+    minutesLeftTimer && clearTimeout(minutesLeftTimer);
+  }
+});
 
 export const boardStore = initialState;
 export type BoardInstance = Instance<typeof BoardStore>;

@@ -4,24 +4,9 @@ import { SmileIcon, SadIcon, GlassesIcon } from '@components/Icons';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 
-let timer: number;
-
 const Controls = () => {
-  const { resetGame, gameIsLost, gameIsWon, number_of_mines } = useMst();
-  const [seconds, setSeconds] = useState(0);
-
-  useEffect(() => {
-    timer = setInterval(() => {
-      setSeconds((prevSeconds) => prevSeconds + 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const handleResetClick = () => {
-    setSeconds(0);
-    resetGame();
-  };
+  const { minutesLeft, secondsPlayed, resetGame, gameIsLost, gameIsWon } =
+    useMst();
 
   return (
     <Flex
@@ -38,9 +23,9 @@ const Controls = () => {
         color="red"
         fontFamily="mono"
       >
-        {number_of_mines.toString().padStart(3, '0')}
+        {minutesLeft.toString().padStart(3, '0')}
       </Box>
-      <Button onClick={handleResetClick} size="md">
+      <Button onClick={resetGame} size="md">
         {gameIsLost && <SadIcon />}
         {gameIsWon && <SmileIcon />}
         {!gameIsLost && !gameIsWon && <GlassesIcon />}
@@ -52,7 +37,7 @@ const Controls = () => {
         color="red"
         fontFamily="mono"
       >
-        {seconds.toString().padStart(3, '0')}
+        {secondsPlayed.toString().padStart(3, '0')}
       </Box>
     </Flex>
   );
