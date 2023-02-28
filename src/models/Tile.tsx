@@ -10,7 +10,7 @@ import {
 const Tile = types
   .model({
     id: types.identifier,
-    isMine: types.frozen(types.boolean),
+    isMine: types.optional(types.boolean, false),
 
     isOpened: types.optional(types.boolean, false),
   })
@@ -124,6 +124,10 @@ const Tile = types
     },
   }))
   .actions((self) => ({
+    reset(isMine = false) {
+      self.isOpened = false;
+      self.isMine = isMine;
+    },
     openTile() {
       if (self.isOpened) {
         return;

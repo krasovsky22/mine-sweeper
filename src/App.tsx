@@ -1,6 +1,7 @@
 import {
   Alert,
   AlertDescription,
+  AlertIcon,
   AlertTitle,
   Box,
   Container,
@@ -13,7 +14,7 @@ import { useMst } from '@stores/Board';
 import { observer } from 'mobx-react-lite';
 
 function App() {
-  const { gameIsLost } = useMst();
+  const { gameIsLost, gameIsWon } = useMst();
   return (
     <Container
       minHeight="100vh"
@@ -27,6 +28,12 @@ function App() {
           <Alert status="error">
             <AlertTitle>Boom!</AlertTitle>
             <AlertDescription>You lost.</AlertDescription>
+          </Alert>
+        )}
+        {gameIsWon && (
+          <Alert status="success">
+            <AlertIcon />
+            Congrats. You won the game.
           </Alert>
         )}
         <Controls />

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { useMst } from '@stores/Board';
 
 const Tile = ({ tile }: { tile: TileType }) => {
-  const { gameIsLost } = useMst();
+  const { actionsDisabled } = useMst();
 
   const {
     isExploded,
@@ -31,7 +31,7 @@ const Tile = ({ tile }: { tile: TileType }) => {
       );
     }
 
-    if (gameIsLost && isMine) {
+    if (actionsDisabled && isMine) {
       return (
         <Flex
           width="100%"
@@ -72,7 +72,7 @@ const Tile = ({ tile }: { tile: TileType }) => {
       alignItems="center"
       justifyContent="center"
       textAlign="center"
-      onClick={gameIsLost ? () => {} : openTile}
+      onClick={actionsDisabled ? () => {} : openTile}
     >
       {renderContent()}
     </Flex>
