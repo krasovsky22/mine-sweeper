@@ -1,5 +1,6 @@
-import { Tile } from '@components';
 import { SimpleGrid } from '@chakra-ui/react';
+
+import { Tile } from '@components';
 import { useMst } from '@stores/Board';
 
 const PlayGrid = () => {

@@ -1,8 +1,9 @@
-import { TileType } from '@models/Tile';
-import { Box, Flex, Text } from '@chakra-ui/react';
-import { ExplosionIcon, BombIcon, FlagIcon } from '@components/Icons';
 import { observer } from 'mobx-react-lite';
+import { Box, Flex, Text } from '@chakra-ui/react';
+
 import { useMst } from '@stores/Board';
+import { TileType } from '@models/Tile';
+import { ExplosionIcon, BombIcon, FlagIcon } from '@components/Icons';
 
 const minesCountToColor = (count: number) => {
   if (count > 2) {

@@ -2,7 +2,6 @@ import { useMst } from '@stores/Board';
 import { Button, Flex, Box } from '@chakra-ui/react';
 import { SmileIcon, SadIcon, GlassesIcon } from '@components/Icons';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
 
 const Controls = () => {
   const { minutesLeft, secondsPlayed, resetGame, gameIsLost, gameIsWon } =
