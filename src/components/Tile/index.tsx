@@ -4,12 +4,25 @@ import { ExplosionIcon, BombIcon, FlagIcon } from '@components/Icons';
 import { observer } from 'mobx-react-lite';
 import { useMst } from '@stores/Board';
 
+const minesCountToColor = (count: number) => {
+  if (count > 2) {
+    return 'red.500';
+  }
+
+  if (count > 1) {
+    return 'green.500';
+  }
+
+  return 'blue.500';
+};
+
 const Tile = ({ tile }: { tile: TileType }) => {
   const { actionsDisabled } = useMst();
 
   const {
     isMine,
     openTile,
+    isOpened,
     isFlagged,
     isExploded,
     toggleIsFlagged,
@@ -55,7 +68,13 @@ const Tile = ({ tile }: { tile: TileType }) => {
           height="100%"
           borderColor="nodeBgColor"
           border="0.5px solid gray"
-        />
+        >
+          {neighborMinesCount > 0 && (
+            <Text textColor={minesCountToColor(neighborMinesCount)}>
+              {neighborMinesCount}
+            </Text>
+          )}
+        </Box>
       );
     }
 
@@ -72,19 +91,8 @@ const Tile = ({ tile }: { tile: TileType }) => {
         </Flex>
       );
     }
-    return (
-      <Text
-        textColor={
-          neighborMinesCount > 2
-            ? 'red.500'
-            : neighborMinesCount > 1
-            ? 'green.500'
-            : 'blue.500'
-        }
-      >
-        {neighborMinesCount}
-      </Text>
-    );
+
+    return null;
   };
 
   return (
@@ -93,7 +101,7 @@ const Tile = ({ tile }: { tile: TileType }) => {
       bg="tomato"
       height="30px"
       width="30px"
-      bgColor={isMine ? 'blue.300' : 'nodeBgColor'}
+      bgColor={'nodeBgColor'}
       boxShadow="inset 2px 2px 2px 0px rgb(255 255 255 / 84%), inset -2px -2px 2px 0px rgb(0 0 0 / 84%)"
       flexDir="column"
       alignItems="center"
