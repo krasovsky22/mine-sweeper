@@ -18,12 +18,11 @@ const minesCountToColor = (count: number) => {
 };
 
 const Tile = ({ tile }: { tile: TileType }) => {
-  const { actionsDisabled } = useMst();
+  const { actionsDisabled, toggleIsScary } = useMst();
 
   const {
     isMine,
     openTile,
-    isOpened,
     isFlagged,
     isExploded,
     toggleIsFlagged,
@@ -109,6 +108,8 @@ const Tile = ({ tile }: { tile: TileType }) => {
       justifyContent="center"
       textAlign="center"
       onClick={actionsDisabled ? () => {} : openTile}
+      onMouseDown={toggleIsScary}
+      onMouseUp={toggleIsScary}
       onContextMenu={(event) => {
         event.preventDefault();
         toggleIsFlagged();

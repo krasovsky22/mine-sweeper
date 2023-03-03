@@ -22,8 +22,12 @@ export const BoardStore = types
     tiles: types.array(Tile),
     seconds_played: types.optional(types.number, 0),
     minutes_left: types.optional(types.number, MINUTES_FOR_COMPLETION),
+    is_scary: types.optional(types.boolean, false),
   })
   .actions((self) => ({
+    toggleIsScary() {
+      self.is_scary = !self.is_scary;
+    },
     setSecondsPlayed(secondsPlayed: number) {
       self.seconds_played = secondsPlayed;
     },
@@ -127,6 +131,10 @@ export const BoardStore = types
           .filter((tile) => tile.isMine)
           .every((tile) => tile.isFlagged)
       );
+    },
+
+    get isScary() {
+      return self.is_scary;
     },
   }))
   .views((self) => ({

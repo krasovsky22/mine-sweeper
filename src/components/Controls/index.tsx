@@ -1,11 +1,33 @@
 import { useMst } from '@stores/Board';
 import { Button, Flex, Box } from '@chakra-ui/react';
-import { SmileIcon, SadIcon, GlassesIcon } from '@components/Icons';
+import { SmileIcon, SadIcon, GlassesIcon, ScaryIcon } from '@components/Icons';
 import { observer } from 'mobx-react-lite';
 
 const Controls = () => {
-  const { minutesLeft, secondsPlayed, resetGame, gameIsLost, gameIsWon } =
-    useMst();
+  const {
+    isScary,
+    minutesLeft,
+    secondsPlayed,
+    resetGame,
+    gameIsLost,
+    gameIsWon,
+  } = useMst();
+
+  const renderResetButtonIcon = () => {
+    if (gameIsLost) {
+      return <SadIcon />;
+    }
+
+    if (gameIsWon) {
+      return <SmileIcon />;
+    }
+
+    if (isScary) {
+      return <ScaryIcon />;
+    }
+
+    return <GlassesIcon />;
+  };
 
   return (
     <Flex
@@ -25,9 +47,7 @@ const Controls = () => {
         {minutesLeft.toString().padStart(3, '0')}
       </Box>
       <Button onClick={resetGame} size="md">
-        {gameIsLost && <SadIcon />}
-        {gameIsWon && <SmileIcon />}
-        {!gameIsLost && !gameIsWon && <GlassesIcon />}
+        {renderResetButtonIcon()}
       </Button>
       <Box
         lineHeight="30px"
