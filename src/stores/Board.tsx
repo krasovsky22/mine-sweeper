@@ -125,11 +125,10 @@ export const BoardStore = types
     },
 
     get gameIsWon() {
+      const flaggedTiles = self.tiles.filter((tile) => tile.isMine);
       return (
-        self.tiles
-          // game is won when every flagged tile is a mine
-          .filter((tile) => tile.isMine)
-          .every((tile) => tile.isFlagged)
+        flaggedTiles.every((tile) => tile.isFlagged) &&
+        flaggedTiles.length === self.number_of_mines
       );
     },
 
