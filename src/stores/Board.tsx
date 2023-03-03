@@ -123,9 +123,9 @@ export const BoardStore = types
     get gameIsWon() {
       return (
         self.tiles
-          // game is won when every closed tile is a mine
-          .filter((tile) => !tile.isOpened)
-          .every((tile) => tile.isMine)
+          // game is won when every flagged tile is a mine
+          .filter((tile) => tile.isMine)
+          .every((tile) => tile.isFlagged)
       );
     },
   }))

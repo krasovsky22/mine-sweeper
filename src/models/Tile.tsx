@@ -13,6 +13,7 @@ const Tile = types
     isMine: types.optional(types.boolean, false),
 
     isOpened: types.optional(types.boolean, false),
+    isFlagged: types.optional(types.boolean, false),
   })
 
   .views((self) => ({
@@ -127,6 +128,10 @@ const Tile = types
     reset(isMine = false) {
       self.isOpened = false;
       self.isMine = isMine;
+      self.isFlagged = false;
+    },
+    toggleIsFlagged() {
+      self.isFlagged = !self.isFlagged;
     },
     openTile() {
       if (self.isOpened) {

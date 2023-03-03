@@ -1,6 +1,6 @@
 import { TileType } from '@models/Tile';
 import { Box, Flex, Text } from '@chakra-ui/react';
-import { ExplosionIcon, BombIcon } from '@components/Icons';
+import { ExplosionIcon, BombIcon, FlagIcon } from '@components/Icons';
 import { observer } from 'mobx-react-lite';
 import { useMst } from '@stores/Board';
 
@@ -8,11 +8,13 @@ const Tile = ({ tile }: { tile: TileType }) => {
   const { actionsDisabled } = useMst();
 
   const {
-    isExploded,
-    isOpenedSuccessfully,
     isMine,
     openTile,
+    isFlagged,
+    isExploded,
+    toggleIsFlagged,
     neighborMinesCount,
+    isOpenedSuccessfully,
   } = tile;
 
   const renderContent = () => {
@@ -56,6 +58,20 @@ const Tile = ({ tile }: { tile: TileType }) => {
         />
       );
     }
+
+    if (isFlagged) {
+      return (
+        <Flex
+          width="100%"
+          height="100%"
+          flexDir="column"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <FlagIcon />
+        </Flex>
+      );
+    }
     return (
       <Text
         textColor={
@@ -84,6 +100,10 @@ const Tile = ({ tile }: { tile: TileType }) => {
       justifyContent="center"
       textAlign="center"
       onClick={actionsDisabled ? () => {} : openTile}
+      onContextMenu={(event) => {
+        event.preventDefault();
+        toggleIsFlagged();
+      }}
     >
       {renderContent()}
     </Flex>
