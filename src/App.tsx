@@ -1,14 +1,11 @@
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Box,
-  Container,
   Flex,
-  SimpleGrid,
+  Alert,
+  AlertIcon,
+  Container,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
-import Node from '@/components/Tile';
 import { Controls, PlayGrid } from './components';
 import { useMst } from '@stores/Board';
 import { observer } from 'mobx-react-lite';

@@ -111,9 +111,7 @@ export const BoardStore = types
     },
 
     get gameIsLost() {
-      return (
-        self.number_of_mines <= 0 || self.tiles.some((tile) => tile.isExploded)
-      );
+      return self.tiles.some((tile) => tile.isExploded);
     },
 
     get minutesLeft() {
